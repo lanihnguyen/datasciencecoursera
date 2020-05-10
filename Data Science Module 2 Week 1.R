@@ -289,4 +289,117 @@ x[1,2] # Index first row, second column
 x[1, ] # Extract first row
 x[ , 2] # Extract second column
 
-# 
+# By default, when a single element of a matrix is extracted, it returns as a vector of length
+# 1 rather than a 1x1 matrix -- you can turn this off by doing: drop = FALSE when indexing
+
+x[1, 2, drop = FALSE] # 1x1 matrix that extracted the value in the 1st row 2nd col of og matrix
+
+x[1, , drop = FALSE] # 1x3 matrix that extracted the values in the 1st row 
+
+x[, 2, drop = FALSE] # 2x1 matrix that extracted the values in the 2nd  column 
+
+### SUBSETTING: PARTIAL MATCHING
+
+## Partial Matching Example 
+
+x <- list(aardvark = 1:5)
+
+x$a # Looks for a name in this list that matches the letter "a" - in this case, it still matches
+# with aardvark even though the full name is not called upon
+
+x[["a"]] # [[]] needs to be an exact match to the name in the list
+x[["a", exact = FALSE]] # exact argument matches the letter "a" to a name in the list as close as possible
+
+### SUBSETTING: REMOVING MISSING VALUES
+
+## We want to create a logical vector that checks whether or not the list has NA values
+
+x <- c(1, 2, NA, 4, NA, 5)
+
+bad <- is.na(x) # Tells us where the NAs are so that we can remove them by subsetting
+bad
+
+x[!bad] # Strips missing values from the list x
+
+# What if there are multiple things and you want to take the subset with no missing values?
+x <- c(1, 2, NA, 4, NA, 5)
+y <- c("a", "b", NA, "d", NA, "f")
+
+good <- complete.cases(x,y) # complete.cases() gives us a vector that tells us the positions 
+# of elements that are non-missing
+good # Positions 1, 2, 4, and 6 are non-missing
+
+x[good]
+
+# Removing Missing Values from Dataframes
+airquality[1:6, ] # Shows first 6 rows of airquality dataframe
+
+good <- complete.cases(airquality) # Which rows are complete?
+
+airquality[good, ][1:6, ] # What are the first 6 rows that are complete? (i.e have no NA values)
+
+### VECTORIZED OPERATIONS
+
+x <- 1:4; y <- 6:9
+
+x + y # Adds vectors together
+
+x > 2 
+x >= 2
+y == 8
+x * y
+x/y
+
+## Vectorized Matrix Operations
+x <- matrix(1:4, 2, 2); y <- matrix(rep(10,4), 2, 2)
+
+x*y # Element-wise multiplication
+
+x/y # Element-wise division
+
+x%*%y # True matrix multiplication
+
+x <- 1:4; y<-2 
+x + y
+
+## Homework 1
+
+# Read in the file
+hw1 <- read.csv("hw1_data.csv", header = TRUE)
+
+# Names of the dataset
+names(hw1)
+
+# Extract first two rows of dataset
+hw1[1:2, ]
+
+# Number of rows in the dataset
+n <- nrow(hw1)
+
+# Extract last 2 rows of dataset
+hw1[152:153, ]
+
+# Value of Ozone in the 47th Row
+hw1$Ozone[47]
+
+# Number of NAs in Ozone
+summary(hw1$Ozone)
+
+# Subset rows in data where Ozone > 30 and Temp > 90
+y <- subset(hw1, Ozone > 31 & Temp > 90)
+y
+
+# Mean of Solar in subset Y
+mean(y$Solar.R)
+
+# Subset rows where Month = 6
+z <- subset(hw1, Month == 6)
+
+# Mean of Temp in subset Z
+mean(z$Temp)
+
+# Subset rows in data where Month = 5
+a <- subset(hw1, Month == 5)
+
+# Maximum Value of Ozone in subset A
+summary(a$Ozone)
