@@ -206,5 +206,87 @@ m
 
 # default separator for read.csv() is a comma, default separator for read.table() is a space
 
+### READING LARGE TABLES
+help(read.table)
 
+## Important parameters of read.table to keep in mind:
+# If there are no comments in the file: comment.char = ''
+# colClasses tells R what type of data is in each column of the table - saves time
+  # If all columns of are the same class, just do "colClasses = *class of object*"
+# Another option is only reading in the first 100 or 1000 rows of the dataset --> use nrows
 
+# --------------------------------------------------------------------------------------
+                      # ** EXAMPLE CODE FOR SAPPLY**
+# initial <- read.table("dataset.txt", nrows = 100)
+# classes <- sapply(initial, class)
+# specifying the nrows argument --> looping over each of the 
+# columns using sapply and calling the class function. So the class function will give you,
+# will tell you what class of data is in each column
+# --------------------------------------------------------------------------------------
+
+### SUBSETTING: BASICS
+
+## Subsetting Operators -- Extracts from R Objects
+# [ returns an object of the same class as the original (subsetting a list = output is a list)
+  # Can be used to select more than one element of an object
+# [[ extracts elements of a list/datadrame. Can only be used to extract a single element and the class
+# of the returned object will not be necessarily be a list or a dataframe
+  # Output can be of a different class than the original
+# $ extracts elements of a list/dataframe that has a name
+  # Output can be of a different class than the original
+
+x <- c("a", "b", "c", "c", "d", "a")
+x[1] # Extracts the first element of x
+x[1:4] # Extracts the 1st - 4th index of x
+x[x > "a"] # Extract elements of the list x that are "greater than" a (b, c, d, etc. )
+
+u <- x > "a" # logical vector which outputs which values are greater than a (T)
+u
+
+x[u] # Logical Indexing
+x[x > "a"] # Numeric Indexing
+
+### SUBSETTING: LISTS
+
+x <- list(foo = 1:4, bar = 0.6)
+x
+
+x[1] # Single bracket indexing returns a list if the original class is a list
+x[[1]] # Double bracket will return a sequence (not a list of the sequence)
+
+x$bar # Gives us the element associated with the name "bar" 
+x[["bar"]] # Same as x$bar
+x["bar"] # Returns a list with the element "bar"
+
+x <- list(foo = 1:4, bar = 0.6, baz = "hello")
+x[c(1,3)] # Returns first and third element of the list 2. Allows you to extract multiple elements
+# from a list
+
+# Can use double bracket to index a list where the index itself was computed -- $ can't do this
+name <- "foo"
+
+x[[name]] 
+# "name" is not in the list "foo", but the index was computed so that the index would read in 
+# "name" as "foo" and the function extracted the elements associated with "foo"
+
+# To use a dollar sign, need to use a literal symbol/name that is present in the list
+
+# Double bracket can take an integer sequence -- recurses into a list
+x <- list(a = list(10, 12, 14), b = c(3.14, 2.81))
+x[[c(1,3)]] # Extracting the third element of the first element in the overall list
+x[[1]][[3]]
+x[[c(2,1)]] # Extracting the first element in the second element of the overall list
+
+### SUBSETTING: MATRICES
+## Matrices can be subsetted in the (row, column) type indices
+
+x <- matrix(1:6, 2, 3) # 2x3 matrix with numerics 1:6
+x
+
+x[1,2] # Index first row, second column
+
+# Indices can be missing
+x[1, ] # Extract first row
+x[ , 2] # Extract second column
+
+# 
